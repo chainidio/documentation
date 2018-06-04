@@ -79,7 +79,9 @@ Also note above that the deployment container has the Heroku Toolbelt installed 
 
 ### Deployment Option #2: Docker Deployment
 
-If you are using [Heroku's Docker support](https://devcenter.heroku.com/articles/container-registry-and-runtime), you can trigger a deployment simply by doing an [image push]({{ site.baseurl }}{% link _pro/builds-and-configuration/steps.md %}#push-steps) to the Heroku registry.
+If you are using [Heroku's Docker support](https://devcenter.heroku.com/articles/container-registry-and-runtime), you can trigger a deployment simply by doing an [image push]({{ site.baseurl }}{% link _pro/builds-and-configuration/steps.md %}#push-steps) to the Heroku registry and then triggering a [Heroku release](https://devcenter.heroku.com/articles/release-phase).
+
+#### Image Push
 
 On Codeship Pro, a push step happens in your [codeship-steps.yml file]({{ site.baseurl }}{% link _pro/builds-and-configuration/steps.md %}) and requires that we generate an authentication token to authenticate with the Heroku registry. Codeship maintains an image that you will use to generate your authentication token, simply add it to your [codeship-services.yml file]({{ site.baseurl }}{% link _pro/builds-and-configuration/services.md %}) and provide your Heroku API key via the encrypted environment variables file discussed above.
 
@@ -110,3 +112,7 @@ Once we have this service in place, we can push to the Heroku registry in our [c
 ```
 
 Note that the `dockercfg_service` directive calls the `dockercfg_generator` we specified above, to generate our token. The only variable you need to be sure to modify if the `image_name`, which must be set to the name for the application image you are pushing as defined in your [codeship-services.yml file]({{ site.baseurl }}{% link _pro/builds-and-configuration/services.md %}).
+
+#### Heroku Release
+
+To create a new release using the images pushed to Heroku's container registry, run `heroku container:release` (specifying the process types you would like to release).
